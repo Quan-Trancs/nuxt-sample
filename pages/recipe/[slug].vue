@@ -1,26 +1,55 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from "vue-router";
 import {
   getRecipeBySlug,
   getRelatedRecipesByCategory,
-} from '~/composables/actions/recipe.actions'
+} from "~/composables/actions/recipe.actions";
 
-const route = useRoute()
+const route = useRoute();
+const router = useRouter();
 
-const slug = route.params.slug as string
-const page = Number(route.query.page || '1')
+const slug = route.params.slug as string;
+const page = Number(route.query.page || "1");
 
-const recipe = getRecipeBySlug(slug)
+const recipe = getRecipeBySlug(slug);
+const loading = ref(true);
+const error = ref<string | null>(null);
+
+// If recipe not found, redirect to home page
+onMounted(() => {
+  loading.value = false;
+  if (!recipe) {
+    error.value = "Recipe not found";
+    setTimeout(() => {
+      router.push("/");
+    }, 3000);
+  }
+});
 
 const { data: relatedRecipes } = getRelatedRecipesByCategory({
-  category: recipe?.category || 'all',
-  productId: recipe?.id || '',
+  category: recipe?.category || "all",
+  productId: recipe?.id || "",
   page: page || 1,
-})
+});
 </script>
 
 <template>
-  <div v-if="recipe" class="p-10">
+  <div
+    v-if="loading"
+    class="p-10 flex justify-center items-center min-h-[50vh]"
+  >
+    <USpinner size="lg" />
+  </div>
+
+  <div
+    v-else-if="error"
+    class="p-10 flex flex-col justify-center items-center min-h-[50vh]"
+  >
+    <p class="text-xl text-red-500">{{ error }}</p>
+    <p class="mt-2">Redirecting to homepage...</p>
+  </div>
+
+  <div v-else-if="recipe" class="p-10">
     <RecipeAddToBrowsingHistory :id="recipe.id" :category="recipe.category" />
     <section>
       <div class="grid grid-cols-1 md:grid-cols-5">

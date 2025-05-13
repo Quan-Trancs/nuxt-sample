@@ -1,12 +1,12 @@
 <script setup lang="ts">
 defineProps<{
   items: {
-    image: string
-    url: string
-    title: string
-    buttonCaption: string
-  }[]
-}>()
+    image: string;
+    url: string;
+    title: string;
+    buttonCaption: string;
+  }[];
+}>();
 </script>
 
 <template>
@@ -34,6 +34,9 @@ defineProps<{
             :alt="item.title"
             class="absolute inset-0 w-full h-full object-cover"
             priority
+            width="1920"
+            height="720"
+            format="webp"
           />
           <div
             class="absolute w-1/3 left-16 md:left-31 top-1/2 transform -translate-y-1/2"

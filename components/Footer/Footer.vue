@@ -34,12 +34,18 @@
 </template>
 
 <script setup>
+import { APP_NAME } from "@/lib/constants";
+
 // Computed properties
-const currentYear = new Date().getFullYear()
-const appName = import.meta.env.VITE_APP_NAME // Use `import.meta.env` for accessing environment variables in Nuxt 3
+const currentYear = new Date().getFullYear();
+const appName = APP_NAME;
+
+import { useSafeWindow } from "@/composables/useSafeWindow";
+
+const { safeScrollTo } = useSafeWindow();
 
 // Methods
 const scrollToTop = () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' })
-}
+  safeScrollTo({ top: 0, behavior: "smooth" });
+};
 </script>
