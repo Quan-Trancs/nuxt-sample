@@ -1,36 +1,39 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import tailwindcss from '@tailwindcss/vite'
-import { fileURLToPath } from 'node:url'
+import tailwindcss from "@tailwindcss/vite";
+import { fileURLToPath } from "node:url";
 
 export default defineNuxtConfig({
-  compatibilityDate: '2024-11-01',
-  devtools: { enabled: true },
+  compatibilityDate: "2024-11-01",
+  devtools: {
+    enabled: process.env.NODE_ENV === "development",
+    crossOriginIsolated: false,
+  },
   vite: {
     plugins: [tailwindcss()],
   },
   modules: [
-    '@nuxt/eslint',
-    '@nuxt/fonts',
-    '@nuxt/icon',
-    '@nuxt/image',
-    '@nuxt/ui',
-    '@pinia/nuxt',
-    'nuxt-rating',
+    "@nuxt/eslint",
+    "@nuxt/fonts",
+    "@nuxt/icon",
+    "@nuxt/image",
+    "@nuxt/ui",
+    "@pinia/nuxt",
+    "nuxt-rating",
     [
-      '@pinia/nuxt',
+      "@pinia/nuxt",
       {
-        autoImports: ['defineStore', 'acceptHMRUpdate'],
+        autoImports: ["defineStore", "acceptHMRUpdate"],
       },
     ],
   ],
   pinia: {
-    storesDirs: ['./stores/**', './custom-folder/stores/**'],
+    storesDirs: ["./stores/**", "./custom-folder/stores/**"],
   },
-  css: ['~/assets/css/main.css'],
+  css: ["~/assets/css/main.css"],
   alias: {
-    '@': fileURLToPath(new URL('./', import.meta.url)), // set @ to root
+    "@": fileURLToPath(new URL("./", import.meta.url)), // set @ to root
   },
   image: {
-    dir: 'public',
+    dir: "public",
   },
-})
+});

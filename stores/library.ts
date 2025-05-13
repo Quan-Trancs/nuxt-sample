@@ -1,8 +1,8 @@
 // stores/library.ts
-import { defineStore } from 'pinia'
-import type { LibraryItem, Library } from '@/types'
+import { defineStore } from "pinia";
+import type { LibraryItem, Library } from "@/types";
 
-export const useLibraryStore = defineStore('library', {
+export const useLibraryStore = defineStore("library", {
   state: (): { library: Library } => ({
     library: {
       items: [],
@@ -10,17 +10,15 @@ export const useLibraryStore = defineStore('library', {
   }),
   actions: {
     async addItem(item: LibraryItem) {
-      this.library.items.push({ ...item })
+      this.library.items.push({ ...item });
     },
     clearLibrary() {
-      this.library.items = []
+      this.library.items = [];
     },
     // ...other actions
   },
-})
+});
 
 if (import.meta.hot) {
-  import.meta.hot.accept(
-    acceptHMRUpdate(useBrowsingHistoryStore, import.meta.hot)
-  )
+  import.meta.hot.accept(acceptHMRUpdate(useLibraryStore, import.meta.hot));
 }
