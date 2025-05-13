@@ -91,7 +91,7 @@ const fetchData = async () => {
 // Fetch data on component mount
 onMounted(fetchData);
 
-const cards = [
+const cards = computed(() => [
   {
     title: "Categories to explore",
     link: {
@@ -128,7 +128,7 @@ const cards = [
       href: "/search?tag=featured",
     },
   },
-];
+]);
 </script>
 
 <template>
