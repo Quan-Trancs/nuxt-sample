@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { APP_NAME } from '~/lib/constants'
-import data from '~/lib/data'
+import { APP_NAME } from "~/lib/constants";
+import data from "~/lib/data";
 </script>
 
 <template>
@@ -34,27 +34,30 @@ import data from '~/lib/data'
     </UContainer>
 
     <!-- Secondary Navigation -->
-    <div class="flex items-center px-3 mb-[1px] bg-[#232f3e]">
-      <UButton
-        variant="ghost"
-        color="neutral"
-        class="flex items-center gap-1 text-base [&_svg]:size-6 dark header-button"
-        icon="i-heroicons-bars-3"
-      >
-        All
-      </UButton>
-      <div
-        class="flex items-center flex-wrap gap-3 overflow-hidden max-h-[42px]"
-      >
-        <NuxtLink
-          v-for="menu in data.headerMenus"
-          :key="menu.href"
-          :to="menu.href"
-          class="header-button !p-2"
+    <div class="flex items-center justify-between px-3 mb-[1px] bg-[#232f3e]">
+      <div class="flex items-center">
+        <UButton
+          variant="ghost"
+          color="neutral"
+          class="flex items-center gap-1 text-base [&_svg]:size-6 dark header-button"
+          icon="i-heroicons-bars-3"
         >
-          {{ menu.name }}
-        </NuxtLink>
+          All
+        </UButton>
+        <div
+          class="flex items-center flex-wrap gap-3 overflow-hidden max-h-[42px]"
+        >
+          <NuxtLink
+            v-for="menu in data.headerMenus"
+            :key="menu.href"
+            :to="menu.href"
+            class="header-button !p-2"
+          >
+            {{ menu.name }}
+          </NuxtLink>
+        </div>
       </div>
+      <HeaderAddButton />
     </div>
   </header>
 </template>
