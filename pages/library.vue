@@ -12,7 +12,7 @@
             class="text-gray-400"
           />
           <h2 class="h2-bold">Your Library is Empty</h2>
-          <p class="text-gray-600 max-w-md mx-auto">
+          <p class="text-gray-600">
             Save your favorite recipes to your library for quick access later.
             Browse recipes and click the bookmark icon to add them.
           </p>
@@ -26,19 +26,54 @@
       <div v-else>
         <div class="flex justify-between items-center mb-4">
           <p class="text-gray-600">{{ libraryItems.length }} recipe(s) saved</p>
-          <UButton
-            v-if="libraryItems.length > 0"
-            color="gray"
-            variant="ghost"
-            size="sm"
-            @click="confirmClear"
-          >
-            Clear All
-          </UButton>
+          <!-- Confirmation modal for clearing library -->
+          <UModal v-model="isConfirmModalOpen">
+            <UButton
+              v-if="libraryItems.length > 0"
+              color="neutral"
+              variant="ghost"
+              size="md"
+              @click="confirmClear"
+            >
+              Clear All
+            </UButton>
+            <template #content>
+              <UCard>
+                <template #header>
+                  <div class="flex items-center gap-2">
+                    <Icon
+                      name="material-symbols:warning"
+                      class="text-amber-500"
+                    />
+                    <h3 class="text-lg font-bold">Clear Library</h3>
+                  </div>
+                </template>
+                <p>
+                  Are you sure you want to remove all recipes from your library?
+                </p>
+                <p class="text-red-400">This action cannot be undone.</p>
+
+                <template #footer>
+                  <div class="flex justify-end gap-2">
+                    <UButton
+                      color="neutral"
+                      variant="ghost"
+                      @click="isConfirmModalOpen = false"
+                    >
+                      Cancel
+                    </UButton>
+                    <UButton color="error" @click="clearLibrary">
+                      Clear All
+                    </UButton>
+                  </div>
+                </template>
+              </UCard>
+            </template>
+          </UModal>
         </div>
 
         <div
-          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6"
         >
           <div
             v-for="item in libraryItems"
@@ -48,12 +83,12 @@
             <!-- Remove button -->
             <UButton
               icon="i-heroicons-x-mark"
-              color="red"
+              color="error"
               variant="ghost"
               class="absolute top-2 right-2 z-10"
-              size="xs"
-              @click="() => removeItem(item.recipeId)"
+              size="xl"
               aria-label="Remove from library"
+              @click="() => removeItem(item.recipeId)"
             />
 
             <!-- Card wrapper -->
@@ -76,11 +111,7 @@
                   <h3 class="font-bold text-lg mb-2">{{ item.name }}</h3>
                 </NuxtLink>
                 <div class="mt-auto">
-                  <UBadge
-                    :color="getCategoryColor(item.category)"
-                    size="sm"
-                    class="mt-2"
-                  >
+                  <UBadge size="sm" class="mt-2">
                     {{ item.category }}
                   </UBadge>
                 </div>
@@ -90,110 +121,66 @@
         </div>
       </div>
     </UContainer>
-
-    <!-- Confirmation modal for clearing library -->
-    <UModal v-model="isConfirmModalOpen">
-      <UCard>
-        <template #header>
-          <div class="flex items-center gap-2">
-            <Icon name="material-symbols:warning" class="text-amber-500" />
-            <h3 class="text-lg font-bold">Clear Library</h3>
-          </div>
-        </template>
-
-        <p>
-          Are you sure you want to remove all recipes from your library? This
-          action cannot be undone.
-        </p>
-
-        <template #footer>
-          <div class="flex justify-end gap-2">
-            <UButton
-              color="gray"
-              variant="ghost"
-              @click="isConfirmModalOpen = false"
-            >
-              Cancel
-            </UButton>
-            <UButton color="red" @click="clearLibrary"> Clear All </UButton>
-          </div>
-        </template>
-      </UCard>
-    </UModal>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useLibraryStore } from "@/stores/library";
-import { storeToRefs } from "pinia";
+import { useLibraryStore } from '@/stores/library'
+import { storeToRefs } from 'pinia'
 
 // Initialize page
 definePageMeta({
-  title: "My Recipe Library",
-  layout: "default",
-});
+  title: 'My Recipe Library',
+  layout: 'default',
+})
 
 // Get library store
-const libraryStore = useLibraryStore();
-const { library } = storeToRefs(libraryStore);
-const libraryItems = computed(() => library.value.items);
+const libraryStore = useLibraryStore()
+const { library } = storeToRefs(libraryStore)
+const libraryItems = computed(() => library.value.items)
 
 // Modal state
-const isConfirmModalOpen = ref(false);
-const toast = useToast();
+const isConfirmModalOpen = ref(false)
+const toast = useToast()
 
 // Functions
 const removeItem = (recipeId: string) => {
   // Find the item index
   const itemIndex = libraryItems.value.findIndex(
-    (item) => item.recipeId === recipeId,
-  );
+    (item) => item.recipeId === recipeId
+  )
   if (itemIndex !== -1) {
     // Create a new array without the item (avoiding direct state mutation)
-    const newItems = [...libraryItems.value];
-    newItems.splice(itemIndex, 1);
-    libraryStore.library.items = newItems;
+    const newItems = [...libraryItems.value]
+    newItems.splice(itemIndex, 1)
+    libraryStore.library.items = newItems
 
     toast.add({
-      title: "Recipe Removed",
-      description: "Recipe has been removed from your library",
-      icon: "i-heroicons-check-circle",
-      color: "green",
-      timeout: 3000,
-    });
+      title: 'Recipe Removed',
+      description: 'Recipe has been removed from your library',
+      icon: 'i-heroicons-check-circle',
+      color: 'success',
+      duration: 3000,
+    })
   }
-};
+}
 
 const confirmClear = () => {
-  isConfirmModalOpen.value = true;
-};
+  isConfirmModalOpen.value = true
+}
 
 const clearLibrary = () => {
-  libraryStore.clearLibrary();
-  isConfirmModalOpen.value = false;
+  libraryStore.clearLibrary()
+  isConfirmModalOpen.value = false
 
   toast.add({
-    title: "Library Cleared",
-    description: "All recipes have been removed from your library",
-    icon: "i-heroicons-check-circle",
-    color: "green",
-    timeout: 3000,
-  });
-};
+    title: 'Library Cleared',
+    description: 'All recipes have been removed from your library',
+    icon: 'i-heroicons-check-circle',
+    color: 'success',
+    duration: 3000,
+  })
+}
 
 // Helper function to get a color based on category
-const getCategoryColor = (category: string): string => {
-  const colorMap: Record<string, string> = {
-    Dessert: "pink",
-    "Main Course": "green",
-    Appetizer: "yellow",
-    Breakfast: "orange",
-    Snack: "blue",
-    Soup: "indigo",
-    Salad: "emerald",
-    Beverage: "purple",
-  };
-
-  return colorMap[category] || "gray";
-};
 </script>

@@ -34,18 +34,18 @@
 </template>
 
 <script setup>
-import { APP_NAME } from "@/lib/constants";
+import { APP_NAME } from '@/lib/constants'
+
+import { useSafeWindow } from '@/composables/useSafeWindow'
 
 // Computed properties
-const currentYear = new Date().getFullYear();
-const appName = APP_NAME;
+const currentYear = new Date().getFullYear()
+const appName = APP_NAME
 
-import { useSafeWindow } from "@/composables/useSafeWindow";
-
-const { safeScrollTo } = useSafeWindow();
+const { safeScrollTo } = useSafeWindow()
 
 // Methods
 const scrollToTop = () => {
-  safeScrollTo({ top: 0, behavior: "smooth" });
-};
+  safeScrollTo({ top: 0, behavior: 'smooth' })
+}
 </script>
