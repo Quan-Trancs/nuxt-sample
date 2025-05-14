@@ -1,29 +1,28 @@
 <script setup lang="ts">
-import { ref, reactive } from "vue";
-import { useRouter } from "vue-router";
-import { useToast } from "@nuxt/ui";
-import { RecipeInputSchema } from "@/lib/validator";
-import { generateId, toSlug, formatError } from "@/utils";
-import type { IRecipeInput } from "@/types";
+import { ref, reactive } from 'vue'
+import { useRouter } from 'vue-router'
+import { RecipeInputSchema } from '@/lib/validator'
+import { generateId, toSlug, formatError } from '@/utils'
+import type { IRecipeInput } from '@/types'
 
-const router = useRouter();
-const toast = useToast();
+const router = useRouter()
+const toast = useToast()
 
 // Form state
 const formState = reactive<Partial<IRecipeInput>>({
   id: generateId(),
-  name: "",
-  slug: "",
-  category: "",
-  description: "",
+  name: '',
+  slug: '',
+  category: '',
+  description: '',
   images: [],
-  ingredients: [""],
-  instructions: [""],
+  ingredients: [''],
+  instructions: [''],
   prepTimeMinutes: 0,
   cookTimeMinutes: 0,
   servings: 1,
-  difficulty: "EASY",
-  cuisine: "",
+  difficulty: 'EASY',
+  cuisine: '',
   caloriesPerServing: 0,
   isPublished: false,
   tags: [],
@@ -31,156 +30,156 @@ const formState = reactive<Partial<IRecipeInput>>({
   numReviews: 0,
   ratingDistribution: [],
   reviews: [],
-});
+})
 
 // Form validation
-const errors = ref<Record<string, string>>({});
-const isSubmitting = ref(false);
+const errors = ref<Record<string, string>>({})
+const isSubmitting = ref(false)
 
 // Update slug when name changes
 const updateSlug = () => {
   if (formState.name) {
-    formState.slug = toSlug(formState.name);
+    formState.slug = toSlug(formState.name)
   }
-};
+}
 
 // Add more ingredient fields
 const addIngredient = () => {
   if (!formState.ingredients) {
-    formState.ingredients = [""];
+    formState.ingredients = ['']
   } else {
-    formState.ingredients.push("");
+    formState.ingredients.push('')
   }
-};
+}
 
 // Remove ingredient field
 const removeIngredient = (index: number) => {
   if (formState.ingredients && formState.ingredients.length > 1) {
-    formState.ingredients.splice(index, 1);
+    formState.ingredients.splice(index, 1)
   }
-};
+}
 
 // Add more instruction fields
 const addInstruction = () => {
   if (!formState.instructions) {
-    formState.instructions = [""];
+    formState.instructions = ['']
   } else {
-    formState.instructions.push("");
+    formState.instructions.push('')
   }
-};
+}
 
 // Remove instruction field
 const removeInstruction = (index: number) => {
   if (formState.instructions && formState.instructions.length > 1) {
-    formState.instructions.splice(index, 1);
+    formState.instructions.splice(index, 1)
   }
-};
+}
 
 // Handle tag input
-const tagInput = ref("");
+const tagInput = ref('')
 const addTag = () => {
   if (tagInput.value && tagInput.value.trim()) {
     if (!formState.tags) {
-      formState.tags = [];
+      formState.tags = []
     }
     // Check if tag already exists
     if (!formState.tags.includes(tagInput.value.trim())) {
-      formState.tags.push(tagInput.value.trim());
+      formState.tags.push(tagInput.value.trim())
     }
-    tagInput.value = "";
+    tagInput.value = ''
   }
-};
+}
 
 const removeTag = (tag: string) => {
   if (formState.tags) {
-    const index = formState.tags.indexOf(tag);
+    const index = formState.tags.indexOf(tag)
     if (index !== -1) {
-      formState.tags.splice(index, 1);
+      formState.tags.splice(index, 1)
     }
   }
-};
+}
 
 // Handle form submission
 const submitForm = async () => {
   try {
-    isSubmitting.value = true;
-    errors.value = {};
+    isSubmitting.value = true
+    errors.value = {}
 
     // Basic validation
     if (!formState.name) {
-      errors.value.name = "Recipe name is required";
+      errors.value.name = 'Recipe name is required'
     }
     if (!formState.category) {
-      errors.value.category = "Category is required";
+      errors.value.category = 'Category is required'
     }
     if (!formState.description) {
-      errors.value.description = "Description is required";
+      errors.value.description = 'Description is required'
     }
     if (!formState.images || formState.images.length === 0) {
-      errors.value.images = "At least one image is required";
+      errors.value.images = 'At least one image is required'
     }
     if (Object.keys(errors.value).length > 0) {
-      throw new Error("Please correct the errors in the form");
+      throw new Error('Please correct the errors in the form')
     }
 
     // Validate with Zod schema
-    const validatedRecipe = RecipeInputSchema.parse(formState);
+    const validatedRecipe = RecipeInputSchema.parse(formState)
 
     // Here we would typically make an API call to save the recipe
     // For now, we'll just show a success message and redirect
-    console.log("Recipe submitted:", validatedRecipe);
+    console.log('Recipe submitted:', validatedRecipe)
 
     toast.add({
-      title: "Success!",
-      description: "Recipe has been created successfully.",
-      icon: "i-heroicons-check-circle",
-      color: "green",
-    });
+      title: 'Success!',
+      description: 'Recipe has been created successfully.',
+      icon: 'i-heroicons-check-circle',
+      color: 'success',
+    })
 
     // Redirect to the recipe page
-    router.push(`/recipe/${formState.slug}`);
+    router.push(`/recipe/${formState.slug}`)
   } catch (error) {
-    const errorMessage = formatError(error);
+    const errorMessage = formatError(error)
     toast.add({
-      title: "Error",
+      title: 'Error',
       description: errorMessage,
-      icon: "i-heroicons-x-circle",
-      color: "red",
-    });
+      icon: 'i-heroicons-x-circle',
+      color: 'error',
+    })
   } finally {
-    isSubmitting.value = false;
+    isSubmitting.value = false
   }
-};
+}
 
 // Categories for selection
 const categories = [
-  "Breakfast",
-  "Lunch",
-  "Dinner",
-  "Dessert",
-  "Snack",
-  "Appetizer",
-  "Salad",
-  "Soup",
-  "Beverage",
-  "Smoothie",
-  "Baked Goods",
-];
+  'Breakfast',
+  'Lunch',
+  'Dinner',
+  'Dessert',
+  'Snack',
+  'Appetizer',
+  'Salad',
+  'Soup',
+  'Beverage',
+  'Smoothie',
+  'Baked Goods',
+]
 
 // Difficulty levels for selection
 const difficultyLevels = [
-  { value: "EASY", label: "Easy" },
-  { value: "MEDIUM", label: "Medium" },
-  { value: "HARD", label: "Hard" },
-];
+  { value: 'EASY', label: 'Easy' },
+  { value: 'MEDIUM', label: 'Medium' },
+  { value: 'HARD', label: 'Hard' },
+]
 
 // Handle media upload success
 const handleMediaUploadSuccess = (urls: string[]) => {
   if (!formState.images) {
-    formState.images = [];
+    formState.images = []
   }
-  formState.images = [...formState.images, ...urls];
-};
+  formState.images = [...formState.images, ...urls]
+}
 </script>
 
 <template>
@@ -195,7 +194,7 @@ const handleMediaUploadSuccess = (urls: string[]) => {
 
     <h1 class="text-3xl font-bold mb-6">Add New Recipe</h1>
 
-    <form @submit.prevent="submitForm" class="space-y-8">
+    <form class="space-y-8" @submit.prevent="submitForm">
       <!-- Basic Information Section -->
       <UCard class="p-6">
         <template #header>
@@ -207,58 +206,85 @@ const handleMediaUploadSuccess = (urls: string[]) => {
           </div>
         </template>
 
-        <div class="space-y-6">
+        <div class="space-y-6 grid grid-cols-1 md:grid-cols-5">
           <!-- Recipe Name -->
-          <UFormGroup label="Recipe Name" :error="errors.name" required>
+          <UFormField
+            label="Recipe Name"
+            :error="errors.name"
+            required
+            class="md:col-span-2 mr-2"
+          >
             <UInput
               v-model="formState.name"
-              @blur="updateSlug"
               placeholder="Enter recipe name"
+              class="w-full"
+              @blur="updateSlug"
             />
-          </UFormGroup>
-
-          <!-- Recipe Slug -->
-          <UFormGroup label="Recipe URL Slug" :error="errors.slug" required>
-            <UInput
-              v-model="formState.slug"
-              placeholder="recipe-url-slug"
-              hint="This will be used in the URL. Automatically generated from recipe name."
-            />
-          </UFormGroup>
+          </UFormField>
 
           <!-- Category -->
-          <UFormGroup label="Category" :error="errors.category" required>
+          <UFormField
+            label="Category"
+            :error="errors.category"
+            required
+            class="md:col-span-2"
+          >
             <USelectMenu
               v-model="formState.category"
-              :options="categories"
+              :items="categories"
               placeholder="Select a category"
             />
-          </UFormGroup>
+          </UFormField>
 
           <!-- Cuisine -->
-          <UFormGroup label="Cuisine" :error="errors.cuisine" required>
+          <UFormField
+            label="Cuisine"
+            :error="errors.cuisine"
+            required
+            class="md:col-span-2"
+          >
             <UInput
               v-model="formState.cuisine"
-              placeholder="e.g., Italian, Mexican, Chinese"
+              placeholder="e.g., Italian, Mexican, chinese"
             />
-          </UFormGroup>
-
-          <!-- Description -->
-          <UFormGroup label="Description" :error="errors.description" required>
-            <UTextarea
-              v-model="formState.description"
-              placeholder="Describe your recipe"
-              rows="4"
+          </UFormField>
+          <!-- Difficulty -->
+          <UFormField
+            label="Difficulty"
+            :error="errors.difficulty"
+            required
+            class="md:col-span-1"
+          >
+            <URadioGroup
+              v-model="formState.difficulty"
+              :items="difficultyLevels"
+              orientation="horizontal"
             />
-          </UFormGroup>
+          </UFormField>
 
           <!-- Tags -->
-          <UFormGroup label="Tags" :error="errors.tags">
-            <div class="flex flex-wrap gap-2 mb-2">
+          <UFormField label="Tags" :error="errors.tags" class="md:col-span-5">
+            <div class="flex mb-2">
+              <UInput
+                v-model="tagInput"
+                placeholder="Add a tag"
+                class="mr-2"
+                @keyup.enter.prevent="addTag"
+              />
+              <UButton
+                type="button"
+                color="info"
+                variant="soft"
+                @click="addTag"
+              >
+                Add
+              </UButton>
+            </div>
+            <div class="flex flex-wrap gap-2">
               <UBadge
                 v-for="tag in formState.tags"
                 :key="tag"
-                color="blue"
+                color="info"
                 class="mr-2 mb-2"
               >
                 {{ tag }}
@@ -267,32 +293,30 @@ const handleMediaUploadSuccess = (urls: string[]) => {
                 </button>
               </UBadge>
             </div>
-            <div class="flex">
-              <UInput
-                v-model="tagInput"
-                placeholder="Add a tag"
-                @keyup.enter.prevent="addTag"
-                class="mr-2"
-              />
-              <UButton
-                type="button"
-                color="blue"
-                variant="soft"
-                @click="addTag"
-              >
-                Add
-              </UButton>
-            </div>
-          </UFormGroup>
-
-          <!-- Difficulty -->
-          <UFormGroup label="Difficulty" :error="errors.difficulty" required>
-            <URadioGroup
-              v-model="formState.difficulty"
-              :options="difficultyLevels"
-              orientation="horizontal"
+          </UFormField>
+          <!-- Description -->
+          <UFormField
+            label="Description"
+            :error="errors.description"
+            required
+            class="md:col-span-5"
+          >
+            <UTextarea
+              v-model="formState.description"
+              placeholder="Describe your recipe"
+              :rows="4"
+              class="w-full"
             />
-          </UFormGroup>
+          </UFormField>
+          <!-- Recipe Slug -->
+          <UFormField :error="errors.slug" required>
+            <UInput
+              v-model="formState.slug"
+              placeholder="recipe-url-slug"
+              hint="This will be used in the URL. Automatically generated from recipe name."
+              hidden
+            />
+          </UFormField>
         </div>
       </UCard>
 
@@ -308,9 +332,9 @@ const handleMediaUploadSuccess = (urls: string[]) => {
         </template>
 
         <div class="space-y-6">
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
             <!-- Prep Time -->
-            <UFormGroup
+            <UFormField
               label="Prep Time (minutes)"
               :error="errors.prepTimeMinutes"
               required
@@ -320,10 +344,10 @@ const handleMediaUploadSuccess = (urls: string[]) => {
                 type="number"
                 min="0"
               />
-            </UFormGroup>
+            </UFormField>
 
             <!-- Cook Time -->
-            <UFormGroup
+            <UFormField
               label="Cook Time (minutes)"
               :error="errors.cookTimeMinutes"
               required
@@ -333,66 +357,69 @@ const handleMediaUploadSuccess = (urls: string[]) => {
                 type="number"
                 min="0"
               />
-            </UFormGroup>
+            </UFormField>
 
             <!-- Servings -->
-            <UFormGroup label="Servings" :error="errors.servings" required>
+            <UFormField label="Servings" :error="errors.servings" required>
               <UInput
                 v-model.number="formState.servings"
                 type="number"
                 min="1"
               />
-            </UFormGroup>
-          </div>
-
-          <!-- Calories -->
-          <UFormGroup
-            label="Calories per Serving"
-            :error="errors.caloriesPerServing"
-          >
-            <UInput
-              v-model.number="formState.caloriesPerServing"
-              type="number"
-              min="0"
-              placeholder="e.g., 350"
-            />
-          </UFormGroup>
-
-          <!-- Ingredients -->
-          <UFormGroup label="Ingredients" :error="errors.ingredients" required>
-            <div
-              v-for="(ingredient, index) in formState.ingredients"
-              :key="`ingredient-${index}`"
-              class="flex mb-2"
+            </UFormField>
+            <!-- Calories -->
+            <UFormField
+              label="Calories per Serving"
+              :error="errors.caloriesPerServing"
             >
               <UInput
-                v-model="formState.ingredients[index]"
-                placeholder="e.g., 2 tablespoons olive oil"
-                class="flex-grow"
+                v-model.number="formState.caloriesPerServing"
+                type="number"
+                min="0"
+                placeholder="e.g., 350"
               />
-              <UButton
-                v-if="formState.ingredients && formState.ingredients.length > 1"
-                type="button"
-                color="red"
-                variant="soft"
-                icon="i-heroicons-trash"
-                class="ml-2"
-                @click="removeIngredient(index)"
-              />
+            </UFormField>
+          </div>
+
+          <!-- Ingredients -->
+          <UFormField label="Ingredients" :error="errors.ingredients" required>
+            <div v-if="formState.ingredients">
+              <div
+                v-for="(ingredient, index) in formState.ingredients"
+                :key="`ingredient-${index}`"
+                class="flex mb-2"
+              >
+                <UInput
+                  v-model="formState.ingredients[index]"
+                  placeholder="e.g., 2 tablespoons olive oil"
+                  class="flex-grow"
+                />
+                <UButton
+                  v-if="
+                    formState.ingredients && formState.ingredients.length > 1
+                  "
+                  type="button"
+                  color="error"
+                  variant="soft"
+                  icon="i-heroicons-trash"
+                  class="ml-2"
+                  @click="removeIngredient(index)"
+                />
+              </div>
             </div>
             <UButton
               type="button"
-              color="gray"
+              color="neutral"
               variant="soft"
               class="mt-2"
               @click="addIngredient"
             >
               Add Ingredient
             </UButton>
-          </UFormGroup>
+          </UFormField>
 
           <!-- Instructions -->
-          <UFormGroup
+          <UFormField
             label="Instructions"
             :error="errors.instructions"
             required
@@ -403,7 +430,7 @@ const handleMediaUploadSuccess = (urls: string[]) => {
               class="flex mb-2"
             >
               <div class="flex-grow">
-                <div class="flex items-center">
+                <div v-if="formState.instructions" class="flex items-center">
                   <span
                     class="flex items-center justify-center bg-dodgeroll-gold-500 w-7 h-7 rounded-full text-white text-lg font-bold mr-2"
                   >
@@ -412,7 +439,7 @@ const handleMediaUploadSuccess = (urls: string[]) => {
                   <UTextarea
                     v-model="formState.instructions[index]"
                     placeholder="Describe this step..."
-                    rows="2"
+                    :rows="2"
                     class="flex-grow"
                   />
                 </div>
@@ -422,7 +449,7 @@ const handleMediaUploadSuccess = (urls: string[]) => {
                   formState.instructions && formState.instructions.length > 1
                 "
                 type="button"
-                color="red"
+                color="error"
                 variant="soft"
                 icon="i-heroicons-trash"
                 class="ml-2 self-start mt-2"
@@ -431,14 +458,14 @@ const handleMediaUploadSuccess = (urls: string[]) => {
             </div>
             <UButton
               type="button"
-              color="gray"
+              color="neutral"
               variant="soft"
               class="mt-2"
               @click="addInstruction"
             >
               Add Instruction
             </UButton>
-          </UFormGroup>
+          </UFormField>
         </div>
       </UCard>
 
@@ -454,9 +481,9 @@ const handleMediaUploadSuccess = (urls: string[]) => {
         </template>
 
         <div class="space-y-6">
-          <UFormGroup label="Images" :error="errors.images" required>
+          <UFormField label="Images" :error="errors.images" required>
             <RecipeMediaUpload @upload-success="handleMediaUploadSuccess" />
-          </UFormGroup>
+          </UFormField>
 
           <!-- Preview Current Images -->
           <div v-if="formState.images && formState.images.length > 0">
@@ -476,7 +503,7 @@ const handleMediaUploadSuccess = (urls: string[]) => {
                 />
                 <UButton
                   type="button"
-                  color="red"
+                  color="error"
                   variant="solid"
                   icon="i-heroicons-trash"
                   size="xs"
@@ -501,7 +528,7 @@ const handleMediaUploadSuccess = (urls: string[]) => {
           </div>
         </template>
 
-        <UFormGroup label="Publishing Status">
+        <UFormField label="Publishing Status">
           <UToggle
             v-model="formState.isPublished"
             :on-icon="'i-heroicons-check'"
@@ -510,14 +537,14 @@ const handleMediaUploadSuccess = (urls: string[]) => {
             <template #on>Published</template>
             <template #off>Draft</template>
           </UToggle>
-        </UFormGroup>
+        </UFormField>
       </UCard>
 
       <!-- Form Actions -->
       <div class="flex justify-end space-x-4">
         <UButton
           type="button"
-          color="gray"
+          color="neutral"
           variant="soft"
           @click="router.push('/')"
         >
@@ -525,11 +552,11 @@ const handleMediaUploadSuccess = (urls: string[]) => {
         </UButton>
         <UButton
           type="submit"
-          color="green"
+          color="success"
           :loading="isSubmitting"
           :disabled="isSubmitting"
         >
-          {{ formState.isPublished ? "Publish Recipe" : "Save as Draft" }}
+          {{ formState.isPublished ? 'Publish Recipe' : 'Save as Draft' }}
         </UButton>
       </div>
     </form>

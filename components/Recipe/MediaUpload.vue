@@ -1,38 +1,37 @@
 <script setup lang="ts">
-import { ref, reactive } from "vue";
-import { useToast } from "@nuxt/ui";
-import { configureMediaUpload } from "@/composables/actions/media.actions";
+import { ref, reactive } from 'vue'
+import { configureMediaUpload } from '@/composables/actions/media.actions'
 
 const emit = defineEmits<{
-  "upload-success": [urls: string[]];
-}>();
+  'upload-success': [urls: string[]]
+}>()
 
-const toast = useToast();
+const toast = useToast()
 
 // Upload configuration
 const uploadConfig = reactive({
-  endpoint: "",
+  endpoint: '',
   headers: {} as Record<string, string>,
   maxFileSize: 5, // MB
   maxFiles: 10,
-  allowedTypes: ["image/jpeg", "image/png", "image/webp", "image/gif"],
+  allowedTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
   isConfigured: false,
-});
+})
 
 // File selection state
-const selectedFiles = ref<File[]>([]);
-const uploading = ref(false);
-const progress = ref(0);
-const showConfigForm = ref(false);
+const selectedFiles = ref<File[]>([])
+const uploading = ref(false)
+const progress = ref(0)
+const showConfigForm = ref(false)
 
 // Handle file selection
 const handleFileSelect = (event: Event) => {
-  const input = event.target as HTMLInputElement;
+  const input = event.target as HTMLInputElement
   if (input.files) {
     // Filter out files that exceed max size or are not allowed types
-    const files = Array.from(input.files);
-    const validFiles: File[] = [];
-    const invalidFiles: { file: File; reason: string }[] = [];
+    const files = Array.from(input.files)
+    const validFiles: File[] = []
+    const invalidFiles: { file: File; reason: string }[] = []
 
     files.forEach((file) => {
       // Check file size (convert MB to bytes)
@@ -40,32 +39,32 @@ const handleFileSelect = (event: Event) => {
         invalidFiles.push({
           file,
           reason: `File exceeds maximum size of ${uploadConfig.maxFileSize}MB`,
-        });
-        return;
+        })
+        return
       }
 
       // Check file type
       if (!uploadConfig.allowedTypes.includes(file.type)) {
         invalidFiles.push({
           file,
-          reason: "File type not allowed",
-        });
-        return;
+          reason: 'File type not allowed',
+        })
+        return
       }
 
-      validFiles.push(file);
-    });
+      validFiles.push(file)
+    })
 
     // Display errors for invalid files
     if (invalidFiles.length > 0) {
       invalidFiles.forEach(({ file, reason }) => {
         toast.add({
-          title: "Invalid File",
+          title: 'Invalid File',
           description: `${file.name}: ${reason}`,
-          color: "orange",
-          icon: "i-heroicons-exclamation-triangle",
-        });
-      });
+          color: 'error',
+          icon: 'i-heroicons-exclamation-triangle',
+        })
+      })
     }
 
     // Add valid files to selection
@@ -75,164 +74,165 @@ const handleFileSelect = (event: Event) => {
         uploadConfig.maxFiles
       ) {
         toast.add({
-          title: "Too Many Files",
+          title: 'Too Many Files',
           description: `You can upload a maximum of ${uploadConfig.maxFiles} files`,
-          color: "orange",
-          icon: "i-heroicons-exclamation-triangle",
-        });
+          color: 'error',
+          icon: 'i-heroicons-exclamation-triangle',
+        })
 
         // Only add files up to the maximum
         const availableSlots =
-          uploadConfig.maxFiles - selectedFiles.value.length;
+          uploadConfig.maxFiles - selectedFiles.value.length
         selectedFiles.value = [
           ...selectedFiles.value,
           ...validFiles.slice(0, availableSlots),
-        ];
+        ]
       } else {
-        selectedFiles.value = [...selectedFiles.value, ...validFiles];
+        selectedFiles.value = [...selectedFiles.value, ...validFiles]
       }
     }
 
     // Reset input
-    input.value = "";
+    input.value = ''
   }
-};
+}
 
 // Remove file from selection
 const removeFile = (index: number) => {
-  selectedFiles.value.splice(index, 1);
-};
+  selectedFiles.value.splice(index, 1)
+}
 
 // Configure endpoint
 const configureEndpoint = () => {
   try {
     if (!uploadConfig.endpoint) {
       toast.add({
-        title: "Configuration Error",
-        description: "Upload endpoint is required",
-        color: "red",
-        icon: "i-heroicons-x-circle",
-      });
-      return;
+        title: 'Configuration Error',
+        description: 'Upload endpoint is required',
+        color: 'error',
+        icon: 'i-heroicons-x-circle',
+      })
+      return
     }
 
     // Call the configuration function
-    configureMediaUpload(uploadConfig.endpoint, uploadConfig.headers);
-    uploadConfig.isConfigured = true;
-    showConfigForm.value = false;
+    configureMediaUpload(uploadConfig.endpoint, uploadConfig.headers)
+    uploadConfig.isConfigured = true
+    showConfigForm.value = false
 
     toast.add({
-      title: "Configuration Success",
-      description: "Upload endpoint configured successfully",
-      color: "green",
-      icon: "i-heroicons-check-circle",
-    });
+      title: 'Configuration Success',
+      description: 'Upload endpoint configured successfully',
+      color: 'success',
+      icon: 'i-heroicons-check-circle',
+    })
   } catch (error) {
     toast.add({
-      title: "Configuration Error",
+      title: 'Configuration Error',
       description:
         error instanceof Error
           ? error.message
-          : "Failed to configure upload endpoint",
-      color: "red",
-      icon: "i-heroicons-x-circle",
-    });
+          : 'Failed to configure upload endpoint',
+      color: 'error',
+      icon: 'i-heroicons-x-circle',
+    })
   }
-};
+}
 
 // Upload files
 const uploadFiles = async () => {
   if (selectedFiles.value.length === 0) {
     toast.add({
-      title: "Upload Error",
-      description: "No files selected",
-      color: "orange",
-      icon: "i-heroicons-exclamation-triangle",
-    });
-    return;
+      title: 'Upload Error',
+      description: 'No files selected',
+      color: 'error',
+      icon: 'i-heroicons-exclamation-triangle',
+    })
+    return
   }
 
   if (!uploadConfig.isConfigured) {
     toast.add({
-      title: "Configuration Required",
-      description: "Please configure the upload endpoint first",
-      color: "orange",
-      icon: "i-heroicons-exclamation-triangle",
-    });
-    showConfigForm.value = true;
-    return;
+      title: 'Configuration Required',
+      description: 'Please configure the upload endpoint first',
+      color: 'error',
+      icon: 'i-heroicons-exclamation-triangle',
+    })
+    showConfigForm.value = true
+    return
   }
 
   try {
-    uploading.value = true;
-    progress.value = 0;
+    uploading.value = true
+    progress.value = 0
 
     // In a real application, we would actually upload the files here
     // For this mock implementation, we'll simulate a network request
 
     // Simulate upload progress
-    const totalSteps = 10;
+    const totalSteps = 10
     const interval = setInterval(() => {
-      progress.value += 100 / totalSteps;
+      progress.value += 100 / totalSteps
       if (progress.value >= 100) {
-        clearInterval(interval);
-        completeUpload();
+        clearInterval(interval)
+        completeUpload()
       }
-    }, 300);
+    }, 300)
 
     // This function would be called after the actual upload
     const completeUpload = () => {
       // Generate mock URLs for the uploaded files
       const mockUrls = selectedFiles.value.map((file, index) => {
         // Create URLs for the files (in a real app, these would come from the server)
-        return `https://example.com/uploads/${Date.now()}-${index}-${file.name}`;
-      });
+        return `https://example.com/uploads/${Date.now()}-${index}-${file.name}`
+      })
 
       // Emit success event with the URLs
-      emit("upload-success", mockUrls);
+      emit('upload-success', mockUrls)
 
       // Reset state
-      selectedFiles.value = [];
-      uploading.value = false;
-      progress.value = 0;
+      selectedFiles.value = []
+      uploading.value = false
+      progress.value = 0
 
       toast.add({
-        title: "Upload Complete",
+        title: 'Upload Complete',
         description: `Successfully uploaded ${mockUrls.length} files`,
-        color: "green",
-        icon: "i-heroicons-check-circle",
-      });
-    };
+        color: 'success',
+        icon: 'i-heroicons-check-circle',
+      })
+    }
   } catch (error) {
-    uploading.value = false;
-    progress.value = 0;
+    uploading.value = false
+    progress.value = 0
 
     toast.add({
-      title: "Upload Error",
+      title: 'Upload Error',
       description:
-        error instanceof Error ? error.message : "Failed to upload files",
-      color: "red",
-      icon: "i-heroicons-x-circle",
-    });
+        error instanceof Error ? error.message : 'Failed to upload files',
+      color: 'success',
+      icon: 'i-heroicons-x-circle',
+    })
   }
-};
+}
 
 // Add custom header
-const newHeader = reactive({ key: "", value: "" });
+const newHeader = reactive({ key: '', value: '' })
 const addHeader = () => {
   if (newHeader.key && newHeader.value) {
-    uploadConfig.headers[newHeader.key] = newHeader.value;
-    newHeader.key = "";
-    newHeader.value = "";
+    uploadConfig.headers[newHeader.key] = newHeader.value
+    newHeader.key = ''
+    newHeader.value = ''
   }
-};
+}
 
 // Remove header
 const removeHeader = (key: string) => {
   if (uploadConfig.headers[key]) {
-    delete uploadConfig.headers[key];
+    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+    delete uploadConfig.headers[key]
   }
-};
+}
 </script>
 
 <template>
@@ -241,13 +241,13 @@ const removeHeader = (key: string) => {
     <div class="flex justify-end">
       <UButton
         type="button"
-        color="gray"
+        color="neutral"
         variant="soft"
         icon="i-heroicons-cog-6-tooth"
         @click="showConfigForm = !showConfigForm"
       >
         {{
-          uploadConfig.isConfigured ? "Reconfigure Upload" : "Configure Upload"
+          uploadConfig.isConfigured ? 'Reconfigure Upload' : 'Configure Upload'
         }}
       </UButton>
     </div>
@@ -256,15 +256,16 @@ const removeHeader = (key: string) => {
     <UCard v-if="showConfigForm" class="p-4">
       <h3 class="text-lg font-semibold mb-4">Configure Upload Settings</h3>
 
-      <div class="space-y-4">
-        <UFormGroup label="Upload Endpoint" required>
+      <div class="space-y-4 grid grid-cols-1 md:grid-cols-2">
+        <UFormField label="Upload Endpoint" required class="md:col-span-2">
           <UInput
             v-model="uploadConfig.endpoint"
             placeholder="https://example.com/api/upload"
+            class="w-full"
           />
-        </UFormGroup>
+        </UFormField>
 
-        <UFormGroup label="Custom Headers">
+        <UFormField label="Custom Headers" class="md:col-span-2">
           <div class="space-y-2">
             <div
               v-for="(value, key) in uploadConfig.headers"
@@ -281,7 +282,7 @@ const removeHeader = (key: string) => {
               </div>
               <UButton
                 type="button"
-                color="red"
+                color="error"
                 variant="soft"
                 icon="i-heroicons-trash"
                 class="ml-2"
@@ -296,7 +297,7 @@ const removeHeader = (key: string) => {
               </div>
               <UButton
                 type="button"
-                color="green"
+                color="success"
                 variant="soft"
                 icon="i-heroicons-plus"
                 class="ml-2"
@@ -304,36 +305,36 @@ const removeHeader = (key: string) => {
               />
             </div>
           </div>
-        </UFormGroup>
+        </UFormField>
 
-        <UFormGroup label="Maximum File Size (MB)">
+        <UFormField label="Maximum File Size (MB)">
           <UInput
             v-model.number="uploadConfig.maxFileSize"
             type="number"
             min="1"
             max="20"
           />
-        </UFormGroup>
+        </UFormField>
 
-        <UFormGroup label="Maximum Files">
+        <UFormField label="Maximum Files">
           <UInput
             v-model.number="uploadConfig.maxFiles"
             type="number"
             min="1"
             max="20"
           />
-        </UFormGroup>
+        </UFormField>
 
-        <div class="flex justify-end space-x-2">
+        <div class="flex justify-end space-x-2 col-span-2">
           <UButton
             type="button"
-            color="gray"
+            color="neutral"
             variant="soft"
             @click="showConfigForm = false"
           >
             Cancel
           </UButton>
-          <UButton type="button" color="blue" @click="configureEndpoint">
+          <UButton type="button" color="info" @click="configureEndpoint">
             Save Configuration
           </UButton>
         </div>
@@ -362,7 +363,9 @@ const removeHeader = (key: string) => {
           type="file"
           multiple
           accept="image/*"
-          class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+          class="absolute inset-0 opacity-0 cursor-pointer mt-10"
+          :class="showConfigForm ? 'mt-[430px]' : 'mt-[40px]'"
+          :style="`height: calc(100% - ${showConfigForm ? 430 : 40}px)`"
           @change="handleFileSelect"
         />
       </div>
@@ -389,7 +392,7 @@ const removeHeader = (key: string) => {
             </div>
             <UButton
               type="button"
-              color="red"
+              color="error"
               variant="ghost"
               icon="i-heroicons-trash"
               size="xs"
@@ -401,7 +404,7 @@ const removeHeader = (key: string) => {
         <div class="flex justify-between">
           <UButton
             type="button"
-            color="gray"
+            color="neutral"
             variant="soft"
             icon="i-heroicons-plus"
           >
@@ -419,7 +422,7 @@ const removeHeader = (key: string) => {
 
           <UButton
             type="button"
-            color="blue"
+            color="info"
             icon="i-heroicons-cloud-arrow-up"
             :loading="uploading"
             :disabled="uploading"
@@ -432,7 +435,7 @@ const removeHeader = (key: string) => {
     </div>
 
     <!-- Upload Progress -->
-    <UProgress v-if="uploading" :value="progress" color="blue" class="mt-2">
+    <UProgress v-if="uploading" :value="progress" color="info" class="mt-2">
       Uploading: {{ Math.round(progress) }}%
     </UProgress>
   </div>
