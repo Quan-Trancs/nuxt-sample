@@ -17,7 +17,18 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-const libraryItemsCount = 0
-const isMounted = ref(true)
+import { ref, computed } from "vue";
+import { storeToRefs } from "pinia";
+import { useLibraryStore } from "@/stores/library";
+
+// Get library store
+const libraryStore = useLibraryStore();
+const { library } = storeToRefs(libraryStore);
+const libraryItemsCount = computed(() => library.value.items.length);
+
+// Track component mount state
+const isMounted = ref(false);
+onMounted(() => {
+  isMounted.value = true;
+});
 </script>
