@@ -45,6 +45,6 @@ const addToLibrary = async () => {
   <UButton
     color="primary"
     icon="material-symbols:bookmark-add-sharp"
-    @click="addToLibrary"
+    @click.prevent="addToLibrary"
   />
 </template>
