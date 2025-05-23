@@ -52,7 +52,7 @@
                         v-model="formData.rating"
                         label="{{ t('Rating') }}"
                       >
-                        <Select v-model="formData.rating">
+                        <USelect v-model="formData.rating">
                           <SelectTrigger>
                             <SelectValue
                               placeholder="{{ t('Select a rating') }}"
@@ -69,15 +69,15 @@
                               </div>
                             </SelectItem>
                           </SelectContent>
-                        </Select>
+                        </USelect>
                       </FormField>
                     </div>
                   </div>
 
                   <DialogFooter>
-                    <Button :disabled="isSubmitting" type="submit" size="lg">
+                    <UButton :disabled="isSubmitting" type="submit" size="lg">
                       {{ isSubmitting ? 'Submitting...' : 'Submit' }}
-                    </Button>
+                    </UButton>
                   </DialogFooter>
                 </Form>
               </DialogContent>
@@ -138,7 +138,7 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue'
 import { getReviewsBySlug } from '@/composables/actions/review.actions'
-import type { IRecipeInput, IReview } from '~/types'
+import type { IRecipeInput, IReview } from '~/types/types'
 
 export default defineComponent({
   props: {

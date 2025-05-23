@@ -1,6 +1,6 @@
 // stores/library.ts
 import { defineStore } from 'pinia'
-import type { LibraryItem, Library } from '@/types'
+import type { LibraryItem, Library } from '~/types/types'
 
 export const useLibraryStore = defineStore('library', {
   state: (): { library: Library } => ({

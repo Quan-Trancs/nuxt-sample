@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // Check if user is on the add recipe page to highlight the button
-const route = useRoute();
-const isActive = computed(() => route.path === "/recipe/add");
+const route = useRoute()
+const isActive = computed(() => route.path === '/recipe/add')
 </script>
 
 <template>

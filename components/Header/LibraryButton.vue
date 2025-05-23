@@ -17,18 +17,17 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
-import { storeToRefs } from "pinia";
-import { useLibraryStore } from "@/stores/library";
+import { ref, computed } from 'vue'
+import { storeToRefs } from 'pinia'
 
 // Get library store
-const libraryStore = useLibraryStore();
-const { library } = storeToRefs(libraryStore);
-const libraryItemsCount = computed(() => library.value.items.length);
+const libraryStore = useLibraryStore()
+const { library } = storeToRefs(libraryStore)
+const libraryItemsCount = computed(() => library.value.items.length)
 
 // Track component mount state
-const isMounted = ref(false);
+const isMounted = ref(false)
 onMounted(() => {
-  isMounted.value = true;
-});
+  isMounted.value = true
+})
 </script>

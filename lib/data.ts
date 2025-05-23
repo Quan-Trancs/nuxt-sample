@@ -1,4 +1,4 @@
-import type { IRecipeInput } from '@/types'
+import type { IRecipeInput } from '~/types/types'
 import { toSlug } from '@/utils'
 
 const recipes: IRecipeInput[] = [

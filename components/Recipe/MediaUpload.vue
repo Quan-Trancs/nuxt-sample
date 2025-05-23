@@ -356,7 +356,7 @@ const removeHeader = (key: string) => {
           </p>
           <p class="mt-1 text-xs">
             Supported formats: JPG, PNG, WebP, GIF
-            <br />Maximum file size: {{ uploadConfig.maxFileSize }}MB
+            <br >Maximum file size: {{ uploadConfig.maxFileSize }}MB
           </p>
         </div>
         <input
@@ -367,7 +367,7 @@ const removeHeader = (key: string) => {
           :class="showConfigForm ? 'mt-[430px]' : 'mt-[40px]'"
           :style="`height: calc(100% - ${showConfigForm ? 430 : 40}px)`"
           @change="handleFileSelect"
-        />
+        >
       </div>
 
       <div v-else class="space-y-4">
@@ -416,7 +416,7 @@ const removeHeader = (key: string) => {
                 accept="image/*"
                 class="hidden"
                 @change="handleFileSelect"
-              />
+              >
             </label>
           </UButton>
 

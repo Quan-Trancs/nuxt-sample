@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { useLibraryStore } from '@/stores/library'
-import type { LibraryItem } from '~/types'
+import type { LibraryItem } from '~/types/types'
 
 const props = defineProps<{
   item: LibraryItem
@@ -91,8 +90,8 @@ const toggleLibraryItem = () => {
     "
     size="sm"
     variant="ghost"
-    @click.prevent="toggleLibraryItem"
     :title="isInLibrary ? 'Remove from library' : 'Add to library'"
+    @click.prevent="toggleLibraryItem"
   />
 
   <!-- Full version (for recipe details page) -->

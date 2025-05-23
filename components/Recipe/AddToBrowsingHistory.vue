@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { useBrowsingHistoryStore } from '@/stores/browsing-history'
 
 const props = defineProps<{
   id: string

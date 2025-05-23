@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue'
-import { useBrowsingHistoryStore } from '@/stores/browsing-history'
 import data from '@/lib/data'
-import type { IRecipeInput } from '~/types'
+import type { IRecipeInput } from '~/types/types'
 
 // Props
 const props = withDefaults(

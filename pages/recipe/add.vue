@@ -3,7 +3,7 @@ import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { RecipeInputSchema } from '@/lib/validator'
 import { generateId, toSlug, formatError } from '@/utils'
-import type { IRecipeInput } from '@/types'
+import type { IRecipeInput } from '~/types/types'
 
 const router = useRouter()
 const toast = useToast()

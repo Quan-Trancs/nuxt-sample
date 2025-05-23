@@ -1,4 +1,4 @@
-import type { IReview } from '~/types'
+import type { IReview } from '~/types/types'
 import data from '~/lib/data'
 
 const recipes = data.recipes

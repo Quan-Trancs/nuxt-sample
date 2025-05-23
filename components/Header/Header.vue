@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { APP_NAME } from "~/lib/constants";
-import data from "~/lib/data";
+import { APP_NAME } from '~/lib/constants'
+import data from '~/lib/data'
 </script>
 
 <template>
@@ -14,7 +14,7 @@ import data from "~/lib/data";
             to="/"
             class="flex items-center header-button font-extrabold text-2xl m-1"
           >
-            <img src="/favicon.ico" alt="Logo" width="40" height="40" />
+            <img src="/favicon.ico" alt="Logo" width="40" height="40" >
             {{ APP_NAME }}
           </NuxtLink>
         </div>

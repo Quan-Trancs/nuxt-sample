@@ -95,7 +95,7 @@ const { data: relatedRecipes } = getRelatedRecipesByCategory({
           <ul class="grid grid-cols-1 md:grid-cols-3 gap-2 text-lg">
             <li v-for="ingredient in recipe?.ingredients" :key="ingredient">
               <label class="flex gap-2 items-center">
-                <input class="hidden peer" type="checkbox" />
+                <input class="hidden peer" type="checkbox" >
                 <div
                   class="relative w-6 h-6 rounded-full border-2 border-dodgeroll-gold-500 flex items-center justify-center peer-checked:after:absolute peer-checked:after:w-4 peer-checked:after:h-4 peer-checked:after:bg-dodgeroll-gold-500 peer-checked:after:rounded-full"
                 />

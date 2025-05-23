@@ -137,7 +137,7 @@
 <script setup lang="ts">
 import { RecipeImageHover } from '#components'
 import { formatNumber } from '@/utils'
-import type { IRecipeInput } from '~/types'
+import type { IRecipeInput } from '~/types/types'
 
 defineProps({
   recipe: {

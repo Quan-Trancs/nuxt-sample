@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import data from "@/lib/data";
-import { toSlug } from "@/utils";
+import data from '@/lib/data'
+import { toSlug } from '@/utils'
 import {
   getAllCategories,
   getRecipesForCard,
   getRecipesByTag,
-} from "~/composables/actions/recipe.actions";
-import type { IRecipeInput, Item } from "~/types";
+} from '~/composables/actions/recipe.actions'
+import type { IRecipeInput, Item } from '~/types/types'
 
-const categories = ref<string[]>([]);
-const latestRecipes = ref<Item[]>([]);
-const mostPickedRecipes = ref<Item[]>([]);
-const featureds = ref<Item[]>([]);
-const todaysRecipes = ref<IRecipeInput[]>([]);
-const balancedRecipes = ref<IRecipeInput[]>([]);
+const categories = ref<string[]>([])
+const latestRecipes = ref<Item[]>([])
+const mostPickedRecipes = ref<Item[]>([])
+const featureds = ref<Item[]>([])
+const todaysRecipes = ref<IRecipeInput[]>([])
+const balancedRecipes = ref<IRecipeInput[]>([])
 
 // Loading states
 const isLoading = ref({
@@ -23,80 +23,80 @@ const isLoading = ref({
   mostPickedRecipes: true,
   todaysRecipes: true,
   balancedRecipes: true,
-});
+})
 
 // Fetch data with proper error handling
 const fetchData = async () => {
   try {
-    isLoading.value.categories = true;
-    categories.value = getAllCategories().slice(0, 4);
+    isLoading.value.categories = true
+    categories.value = getAllCategories().slice(0, 4)
   } catch (error) {
-    console.error("Failed to fetch categories:", error);
+    console.error('Failed to fetch categories:', error)
   } finally {
-    isLoading.value.categories = false;
+    isLoading.value.categories = false
   }
 
   try {
-    isLoading.value.latestRecipes = true;
+    isLoading.value.latestRecipes = true
     latestRecipes.value = await getRecipesForCard({
-      tag: "new-arrival",
+      tag: 'new-arrival',
       limit: 4,
-    });
+    })
   } catch (error) {
-    console.error("Failed to fetch latest recipes:", error);
+    console.error('Failed to fetch latest recipes:', error)
   } finally {
-    isLoading.value.latestRecipes = false;
+    isLoading.value.latestRecipes = false
   }
 
   try {
-    isLoading.value.featureds = true;
-    featureds.value = await getRecipesForCard({ tag: "featured", limit: 4 });
+    isLoading.value.featureds = true
+    featureds.value = await getRecipesForCard({ tag: 'featured', limit: 4 })
   } catch (error) {
-    console.error("Failed to fetch featured recipes:", error);
+    console.error('Failed to fetch featured recipes:', error)
   } finally {
-    isLoading.value.featureds = false;
+    isLoading.value.featureds = false
   }
 
   try {
-    isLoading.value.mostPickedRecipes = true;
+    isLoading.value.mostPickedRecipes = true
     mostPickedRecipes.value = await getRecipesForCard({
-      tag: "most-picked",
+      tag: 'most-picked',
       limit: 4,
-    });
+    })
   } catch (error) {
-    console.error("Failed to fetch most picked recipes:", error);
+    console.error('Failed to fetch most picked recipes:', error)
   } finally {
-    isLoading.value.mostPickedRecipes = false;
+    isLoading.value.mostPickedRecipes = false
   }
 
   try {
-    isLoading.value.todaysRecipes = true;
-    todaysRecipes.value = getRecipesByTag("todays-recipe");
+    isLoading.value.todaysRecipes = true
+    todaysRecipes.value = getRecipesByTag('todays-recipe')
   } catch (error) {
-    console.error("Failed to fetch today's recipes:", error);
+    console.error("Failed to fetch today's recipes:", error)
   } finally {
-    isLoading.value.todaysRecipes = false;
+    isLoading.value.todaysRecipes = false
   }
 
   try {
-    isLoading.value.balancedRecipes = true;
-    balancedRecipes.value = getRecipesByTag("balanced-recipe");
+    isLoading.value.balancedRecipes = true
+    balancedRecipes.value = getRecipesByTag('balanced-recipe')
   } catch (error) {
-    console.error("Failed to fetch balanced recipes:", error);
+    console.error('Failed to fetch balanced recipes:', error)
   } finally {
-    isLoading.value.balancedRecipes = false;
+    isLoading.value.balancedRecipes = false
   }
-};
+}
 
 // Fetch data on component mount
-onMounted(fetchData);
+onMounted(fetchData)
 
 const cards = computed(() => [
   {
-    title: "Categories to explore",
+    title: 'Categories to explore',
     link: {
-      text: "See More",
-      href: "/search",
+      text: 'See More',
+      href: '/search',
     },
     items: categories.value.map((category) => ({
       name: category,
@@ -105,30 +105,30 @@ const cards = computed(() => [
     })),
   },
   {
-    title: "Latest Recipes",
+    title: 'Latest Recipes',
     items: latestRecipes.value,
     link: {
-      text: "View All",
-      href: "/search?tag=new-arrival",
+      text: 'View All',
+      href: '/search?tag=new-arrival',
     },
   },
   {
-    title: "Most Popular",
+    title: 'Most Popular',
     items: mostPickedRecipes.value,
     link: {
-      text: "View All",
-      href: "/search?tag=most-picked",
+      text: 'View All',
+      href: '/search?tag=most-picked',
     },
   },
   {
-    title: "Featured Recipes",
+    title: 'Featured Recipes',
     items: featureds.value,
     link: {
-      text: "View All",
-      href: "/search?tag=featured",
+      text: 'View All',
+      href: '/search?tag=featured',
     },
   },
-]);
+])
 </script>
 
 <template>

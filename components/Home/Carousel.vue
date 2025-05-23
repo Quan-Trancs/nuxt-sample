@@ -1,12 +1,12 @@
 <script setup lang="ts">
 defineProps<{
   items: {
-    image: string;
-    url: string;
-    title: string;
-    buttonCaption: string;
-  }[];
-}>();
+    image: string
+    url: string
+    title: string
+    buttonCaption: string
+  }[]
+}>()
 </script>
 
 <template>

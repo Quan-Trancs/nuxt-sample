@@ -36,35 +36,35 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { APP_NAME } from "@/lib/constants";
+import { ref } from 'vue'
+import { APP_NAME } from '@/lib/constants'
 
 const categories = [
-  { label: "All", value: "All" },
-  { label: "Appetizers", value: "Appetizers" },
-  { label: "Main Dishes", value: "Main Dishes" },
-  { label: "Desserts", value: "Desserts" },
-  { label: "Soups & Stews", value: "Soups & Stews" },
-  { label: "Salads", value: "Salads" },
-  { label: "Beverages", value: "Beverages" },
-  { label: "Snacks", value: "Snacks" },
-  { label: "Breakfast", value: "Breakfast" },
-  { label: "Vegan", value: "Vegan" },
-  { label: "Gluten-Free", value: "Gluten-Free" },
-];
+  { label: 'All', value: 'All' },
+  { label: 'Appetizers', value: 'Appetizers' },
+  { label: 'Main Dishes', value: 'Main Dishes' },
+  { label: 'Desserts', value: 'Desserts' },
+  { label: 'Soups & Stews', value: 'Soups & Stews' },
+  { label: 'Salads', value: 'Salads' },
+  { label: 'Beverages', value: 'Beverages' },
+  { label: 'Snacks', value: 'Snacks' },
+  { label: 'Breakfast', value: 'Breakfast' },
+  { label: 'Vegan', value: 'Vegan' },
+  { label: 'Gluten-Free', value: 'Gluten-Free' },
+]
 
 const formState = ref({
-  category: "All",
-  q: "",
-});
+  category: 'All',
+  q: '',
+})
 
-const router = useRouter();
+const router = useRouter()
 
 const onSubmit = ({ data }: { data: typeof formState.value }) => {
   const params = new URLSearchParams({
     category: data.category,
     q: data.q,
-  });
-  router.push(`/search?${params.toString()}`);
-};
+  })
+  router.push(`/search?${params.toString()}`)
+}
 </script>

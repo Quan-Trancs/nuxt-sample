@@ -125,7 +125,6 @@
 </template>
 
 <script setup lang="ts">
-import { useLibraryStore } from '@/stores/library'
 import { storeToRefs } from 'pinia'
 
 // Initialize page
