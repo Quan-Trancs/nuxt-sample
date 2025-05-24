@@ -1,11 +1,25 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import tailwindcss from '@tailwindcss/vite'
-import { fileURLToPath } from 'node:url'
+import tailwindcss from "@tailwindcss/vite";
+import { fileURLToPath } from "node:url";
 
 export default defineNuxtConfig({
-  compatibilityDate: '2024-11-01',
+  runtimeConfig: {
+    // Private keys that are exposed to the server
+    apiSecret: process.env.API_SECRET || "",
+
+    // Keys within public are also exposed to the client
+    public: {
+      apiBase:
+        process.env.API_BASE ||
+        (process.env.NODE_ENV === "development"
+          ? "/api"
+          : "https://server.pptist.cn"),
+      assetUrl: process.env.ASSET_URL || "https://asset.pptist.cn",
+    },
+  },
+  compatibilityDate: "2024-11-01",
   devtools: {
-    enabled: process.env.NODE_ENV === 'development',
+    enabled: process.env.NODE_ENV === "development",
   },
   vite: {
     plugins: [tailwindcss()],
@@ -21,33 +35,33 @@ export default defineNuxtConfig({
     },
     server: {
       fs: {
-        allow: ['.'], // Allow root
+        allow: ["."], // Allow root
       },
     },
   },
   modules: [
-    '@nuxt/eslint',
-    '@nuxt/fonts',
-    '@nuxt/icon',
-    '@nuxt/image',
-    '@nuxt/ui',
-    '@pinia/nuxt',
-    'nuxt-rating',
+    "@nuxt/eslint",
+    "@nuxt/fonts",
+    "@nuxt/icon",
+    "@nuxt/image",
+    "@nuxt/ui",
+    "@pinia/nuxt",
+    "nuxt-rating",
     [
-      '@pinia/nuxt',
+      "@pinia/nuxt",
       {
-        autoImports: ['defineStore', 'acceptHMRUpdate'],
+        autoImports: ["defineStore", "acceptHMRUpdate"],
       },
     ],
   ],
   pinia: {
-    storesDirs: ['./stores/**', './custom-folder/stores/**'],
+    storesDirs: ["./stores/**", "./custom-folder/stores/**"],
   },
-  css: ['~/assets/css/main.css'],
+  css: ["~/assets/css/main.css"],
   alias: {
-    '@': fileURLToPath(new URL('./', import.meta.url)), // set @ to root
+    "@": fileURLToPath(new URL("./", import.meta.url)), // set @ to root
   },
   image: {
-    dir: 'public',
+    dir: "public",
   },
-})
+});

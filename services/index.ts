@@ -1,10 +1,29 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import customFetch from "./config";
+import { useRuntimeConfig } from "#app";
 
-// export const SERVER_URL = 'http://localhost:5000'
-export const SERVER_URL =
-  import.meta.env.MODE === "development" ? "/api" : "https://server.pptist.cn";
-export const ASSET_URL = "https://asset.pptist.cn";
+// Get API URLs from runtime config if available
+function getUrls() {
+  try {
+    const config = useRuntimeConfig();
+    return {
+      SERVER_URL:
+        config.public.apiBase ||
+        (process.dev ? "/api" : "https://server.pptist.cn"),
+      ASSET_URL: config.public.assetUrl || "https://asset.pptist.cn",
+    };
+  } catch (e) {
+    // Fallback to old method if runtime config is not available
+    return {
+      SERVER_URL: process.dev ? "/api" : "https://server.pptist.cn",
+      ASSET_URL: "https://asset.pptist.cn",
+    };
+  }
+}
+
+const { SERVER_URL, ASSET_URL } = getUrls();
+
+export { SERVER_URL, ASSET_URL };
 
 export default {
   getMockData(filename: string): Promise<any> {
