@@ -13,11 +13,11 @@ export const copyText = (text: string) => {
       action: () => 'copy',
       container: document.body,
     })
-    clipboard.on('success', e => {
+    clipboard.on('success', (e) => {
       clipboard.destroy()
       resolve(e)
     })
-    clipboard.on('error', e => {
+    clipboard.on('error', (e) => {
       clipboard.destroy()
       reject(e)
     })
@@ -31,12 +31,11 @@ export const copyText = (text: string) => {
 export const readClipboard = (): Promise<string> => {
   return new Promise((resolve, reject) => {
     if (navigator.clipboard?.readText) {
-      navigator.clipboard.readText().then(text => {
+      navigator.clipboard.readText().then((text) => {
         if (!text) reject('剪贴板为空或者不包含文本')
         return resolve(text)
       })
-    }
-    else reject('浏览器不支持或禁止访问剪贴板，请使用快捷键 Ctrl + V')
+    } else reject('浏览器不支持或禁止访问剪贴板，请使用快捷键 Ctrl + V')
   })
 }
 
@@ -45,8 +44,7 @@ export const pasteCustomClipboardString = (text: string) => {
   let clipboardData
   try {
     clipboardData = JSON.parse(decrypt(text))
-  }
-  catch {
+  } catch {
     clipboardData = text
   }
 
@@ -72,7 +70,9 @@ export const pasteExcelClipboardString = (text: string): string[][] | null => {
 }
 
 // 尝试解析剪贴板内容是否为HTML table代码
-export const pasteHTMLTableClipboardString = (text: string): string[][] | null => {
+export const pasteHTMLTableClipboardString = (
+  text: string
+): string[][] | null => {
   const parser = new DOMParser()
   const doc = parser.parseFromString(text, 'text/html')
   const table = doc.querySelector('table')

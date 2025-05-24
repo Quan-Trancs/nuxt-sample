@@ -3,7 +3,7 @@
     <div class="header">
       <span class="title">AIPPT</span>
       <span v-if="step === 'template'" class="subtite"
-        >从下方挑选合适的模板，开始生成PPT</span
+        >Choose a template to generate your PPT.</span
       >
       <span v-else-if="step === 'outline'" class="subtite"
         >确认下方内容大纲（点击编辑内容，右键添加/删除大纲项），开始选择模板</span
@@ -64,17 +64,20 @@
         <OutlineEditor v-model:value="outline" />
       </div>
       <div v-if="!outlineCreating" class="btns">
-        <Button class="btn" type="primary" @click="step = 'template'"
-          >选择模板</Button
-        >
+        <Button class="btn" type="primary" @click="step = 'template'">
+          选择模板
+        </Button>
         <Button
           class="btn"
           @click="
-            outline = ''
-            step = 'setup'
+            () => {
+              outline = ''
+              step = 'setup'
+            }
           "
-          >返回重新生成</Button
         >
+          返回重新生成
+        </Button>
       </div>
     </div>
     <div v-if="step === 'template'" class="select-template">
@@ -86,7 +89,7 @@
           :class="{ selected: selectedTemplate === template.id }"
           @click="selectedTemplate = template.id"
         >
-          <img :src="template.cover" :alt="template.name" >
+          <img :src="template.cover" :alt="template.name" />
         </div>
       </div>
       <div class="btns">
@@ -108,7 +111,7 @@ import type { AIPPTSlide } from '@/types/AIPPT'
 import type { Slide } from '@/types/slides'
 import message from '@/utils/message'
 import Input from '~/components/Input.vue'
-import Button from '~/components/Button.vue'
+import Button from '@/components/Button.vue'
 import Select from '~/components/Select.vue'
 import FullscreenSpin from '@/components/FullscreenSpin.vue'
 import OutlineEditor from '@/components/OutlineEditor.vue'

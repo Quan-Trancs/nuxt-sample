@@ -27,8 +27,10 @@
         @ended="handleEnded()"
         @progress="handleProgress()"
         @play="
-          autoHideController()
-          paused = false
+          () => {
+            autoHideController()
+            paused = false
+          }
         "
         @pause="autoHideController()"
         @error="handleError()"

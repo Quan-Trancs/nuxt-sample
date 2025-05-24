@@ -10,11 +10,14 @@
         <template #content>
           <PopoverMenuItem
             @click="
-              openAIPPTDialog()
-              mainMenuVisible = false
+              () => {
+                openAIPPTDialog()
+                mainMenuVisible = false
+              }
             "
-            >AI 生成 PPT</PopoverMenuItem
           >
+            AI 生成 PPT
+          </PopoverMenuItem>
           <FileInput
             accept="application/vnd.openxmlformats-officedocument.presentationml.presentation"
             @change="
@@ -42,37 +45,54 @@
           >
           <PopoverMenuItem
             @click="
-              resetSlides()
-              mainMenuVisible = false
+              () => {
+                resetSlides()
+                mainMenuVisible = false
+              }
             "
-            >重置幻灯片</PopoverMenuItem
           >
+            重置幻灯片
+          </PopoverMenuItem>
           <PopoverMenuItem
             @click="
-              openMarkupPanel()
-              mainMenuVisible = false
+              () => {
+                openMarkupPanel()
+                mainMenuVisible = false
+              }
             "
-            >幻灯片类型标注</PopoverMenuItem
           >
-          <PopoverMenuItem
-            @click="goLink('https://github.com/pipipi-pikachu/PPTist/issues')"
-            >意见反馈</PopoverMenuItem
-          >
-          <PopoverMenuItem
-            @click="
-              goLink(
-                'https://github.com/pipipi-pikachu/PPTist/blob/master/doc/Q&A.md'
-              )
-            "
-            >常见问题</PopoverMenuItem
-          >
+            幻灯片类型标注
+          </PopoverMenuItem>
+
           <PopoverMenuItem
             @click="
-              mainMenuVisible = false
-              hotkeyDrawerVisible = true
+              () => goLink('https://github.com/pipipi-pikachu/PPTist/issues')
             "
-            >快捷操作</PopoverMenuItem
           >
+            意见反馈
+          </PopoverMenuItem>
+
+          <PopoverMenuItem
+            @click="
+              () =>
+                goLink(
+                  'https://github.com/pipipi-pikachu/PPTist/blob/master/doc/Q&A.md'
+                )
+            "
+          >
+            常见问题
+          </PopoverMenuItem>
+
+          <PopoverMenuItem
+            @click="
+              () => {
+                mainMenuVisible = false
+                hotkeyDrawerVisible = true
+              }
+            "
+          >
+            快捷操作
+          </PopoverMenuItem>
         </template>
         <div class="menu-item"><IconHamburgerButton class="icon" /></div>
       </Popover>
@@ -116,8 +136,10 @@
         v-tooltip="'AI生成PPT'"
         class="menu-item"
         @click="
-          openAIPPTDialog()
-          mainMenuVisible = false
+          (() => {
+            openAIPPTDialog()
+            mainMenuVisible = false
+          })()
         "
       >
         <span class="text ai">AI</span>

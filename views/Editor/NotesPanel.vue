@@ -97,13 +97,15 @@
           ref="textAreaRef"
           v-model:value="content"
           :padding="6"
-          :placeholder="`输入批注（为${
-            handleElementId ? '选中元素' : '当前页幻灯片'
-          }）`"
+          :placeholder="`Enter a comment (for ${
+            handleElementId ? 'the selected element' : 'the current slide'
+          })`"
           :rows="2"
           @focus="
-            replyNoteId = ''
-            activeNoteId = ''
+            () => {
+              replyNoteId = ''
+              activeNoteId = ''
+            }
           "
           @enter.prevent="createNote()"
         />

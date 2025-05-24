@@ -68,7 +68,7 @@
               placeholder="输入节名称"
               @blur="($event) => saveSection($event)"
               @keydown.enter.stop="($event) => saveSection($event)"
-            >
+            />
             <span v-else class="text">
               <div class="text-content">
                 {{

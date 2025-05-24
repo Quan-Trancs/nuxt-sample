@@ -25,7 +25,16 @@ const emit = defineEmits<{
   (event: 'select', payload: ChartType): void
 }>()
 
-const chartList: ChartType[] = ['bar', 'column', 'line', 'area', 'scatter', 'pie', 'ring', 'radar']
+const chartList: ChartType[] = [
+  'bar',
+  'column',
+  'line',
+  'area',
+  'scatter',
+  'pie',
+  'ring',
+  'radar',
+]
 
 const selectChart = (chart: ChartType) => {
   emit('select', chart)

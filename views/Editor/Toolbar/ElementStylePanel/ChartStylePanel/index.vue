@@ -95,11 +95,14 @@
             <Button
               class="full-width-btn"
               @click="
-                themesVisible = false
-                themeColorsSettingVisible = true
+                () => {
+                  themesVisible = false
+                  themeColorsSettingVisible = true
+                }
               "
-              >自定义配色</Button
             >
+              自定义配色
+            </Button>
           </div>
         </template>
         <ColorListButton :colors="themeColors" />

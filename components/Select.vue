@@ -155,6 +155,7 @@ const handleSelect = (option: SelectOption) => {
 </script>
 
 <style lang="scss" scoped>
+
 .select {
   width: 100%;
   height: 32px;

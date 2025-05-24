@@ -1,15 +1,11 @@
 <template>
   <div class="line-pool">
     <div v-for="(item, i) in LINE_LIST" :key="item.type" class="category">
-      <div class="category-name">{{item.type}}</div>
+      <div class="category-name">{{ item.type }}</div>
       <div class="line-list">
         <div v-for="(line, j) in item.children" :key="j" class="line-item">
           <div class="line-content" @click="selectLine(line)">
-            <svg
-              overflow="visible" 
-              width="20"
-              height="20"
-            >
+            <svg overflow="visible" width="20" height="20">
               <defs>
                 <LinePointMarker
                   v-if="line.points[0]"
@@ -32,13 +28,21 @@
               </defs>
               <path
                 class="line-path"
-                :d="line.path" 
-                stroke="currentColor" 
-                fill="none" 
-                stroke-width="2" 
+                :d="line.path"
+                stroke="currentColor"
+                fill="none"
+                stroke-width="2"
                 :stroke-dasharray="line.style === 'solid' ? '0, 0' : '4, 1'"
-                :marker-start="line.points[0] ? `url(#${`preset-line-${i}-${j}`}-${line.points[0]}-start)` : ''"
-                :marker-end="line.points[1] ? `url(#${`preset-line-${i}-${j}`}-${line.points[1]}-end)` : ''"
+                :marker-start="
+                  line.points[0]
+                    ? `url(#${`preset-line-${i}-${j}`}-${line.points[0]}-start)`
+                    : ''
+                "
+                :marker-end="
+                  line.points[1]
+                    ? `url(#${`preset-line-${i}-${j}`}-${line.points[1]}-end)`
+                    : ''
+                "
               />
             </svg>
           </div>

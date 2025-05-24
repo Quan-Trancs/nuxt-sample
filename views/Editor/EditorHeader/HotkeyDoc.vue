@@ -1,20 +1,24 @@
 <template>
   <div class="hotkey-doc">
     <template v-for="item in HOTKEY_DOC" :key="item.type">
-      <div class="title">{{item.type}}</div>
-      <div v-for="hotkey in item.children" :key="hotkey.label" class="hotkey-item">
+      <div class="title">{{ item.type }}</div>
+      <div
+        v-for="hotkey in item.children"
+        :key="hotkey.label"
+        class="hotkey-item"
+      >
         <template v-if="hotkey.value">
-          <div class="label">{{hotkey.label}}</div>
-          <div class="value">{{hotkey.value}}</div>
+          <div class="label">{{ hotkey.label }}</div>
+          <div class="value">{{ hotkey.value }}</div>
         </template>
-        <div v-else class="row">{{hotkey.label}}</div>
+        <div v-else class="row">{{ hotkey.label }}</div>
       </div>
     </template>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { HOTKEY_DOC } from '@/configs/hotkey' 
+import { HOTKEY_DOC } from '@/configs/hotkey'
 </script>
 
 <style lang="scss" scoped>

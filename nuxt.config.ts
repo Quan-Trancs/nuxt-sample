@@ -12,8 +12,16 @@ export default defineNuxtConfig({
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: `@use "@/assets/styles/variable.scss" as *;`,
+          additionalData: `
+            @use "@/assets/styles/variable.scss" as *;
+            @use "@/assets/styles/mixin.scss" as *;
+          `,
         },
+      },
+    },
+    server: {
+      fs: {
+        allow: ['.'], // Allow root
       },
     },
   },
@@ -35,13 +43,7 @@ export default defineNuxtConfig({
   pinia: {
     storesDirs: ['./stores/**', './custom-folder/stores/**'],
   },
-  css: [
-    '~/assets/css/main.css',
-    '~/assets/styles/mixin.scss',
-    '~/assets/styles/font.scss',
-    '~/assets/styles/prosemirror.scss',
-    '~/assets/styles/global.scss',
-  ],
+  css: ['~/assets/css/main.css'],
   alias: {
     '@': fileURLToPath(new URL('./', import.meta.url)), // set @ to root
   },

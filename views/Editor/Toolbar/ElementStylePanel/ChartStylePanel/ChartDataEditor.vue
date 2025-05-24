@@ -92,10 +92,10 @@
               v-for="item in chartList"
               :key="item"
               center
-              @click="
+              @click="() => {
                 chartType = item
                 chartTypeSelectVisible = false
-              "
+              }"
               >{{ CHART_TYPE_MAP[item] }}</PopoverMenuItem
             >
           </template>

@@ -31,8 +31,10 @@
               <div
                 class="config-btn"
                 @click="
-                  updateTheme({ fontName: item })
-                  selectedIndex.fontName = index
+                  () => {
+                    updateTheme({ fontName: item })
+                    selectedIndex.fontName = index
+                  }
                 "
               >
                 应用到主题
@@ -71,8 +73,10 @@
               <div
                 class="config-btn"
                 @click="
-                  updateTheme({ fontColor: item })
-                  selectedIndex.fontColor = index
+                  () => {
+                    updateTheme({ fontColor: item })
+                    selectedIndex.fontColor = index
+                  }
                 "
               >
                 应用到主题
@@ -114,8 +118,10 @@
               <div
                 class="config-btn"
                 @click="
-                  updateTheme({ backgroundColor: item })
-                  selectedIndex.backgroundColor = index
+                  () => {
+                    updateTheme({ backgroundColor: item })
+                    selectedIndex.backgroundColor = index
+                  }
                 "
               >
                 应用到主题

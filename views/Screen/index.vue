@@ -2,7 +2,10 @@
 <template>
   <div class="pptist-screen">
     <BaseView v-if="viewMode === 'base'" :change-view-mode="changeViewMode" />
-    <PresenterView v-else-if="viewMode === 'presenter'" :change-view-mode="changeViewMode" />
+    <PresenterView
+      v-else-if="viewMode === 'presenter'"
+      :change-view-mode="changeViewMode"
+    />
   </div>
 </template>
 

@@ -1,13 +1,13 @@
 <template>
   <div class="shape-pool">
     <div v-for="item in SHAPE_LIST" :key="item.type" class="category">
-      <div class="category-name">{{item.type}}</div>
+      <div class="category-name">{{ item.type }}</div>
       <div class="shape-list">
-        <ShapeItemThumbnail 
+        <ShapeItemThumbnail
           v-for="(shape, index) in item.children"
-          :key="index" 
-          class="shape-item" 
-          :shape="shape" 
+          :key="index"
+          class="shape-item"
+          :shape="shape"
           @click="selectShape(shape)"
         />
       </div>
