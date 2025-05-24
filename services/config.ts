@@ -1,4 +1,4 @@
-import { FetchError } from "ofetch";
+import { $fetch, FetchError } from "ofetch";
 import message from "@/utils/message";
 
 // Create default fetch options that will be applied to all requests
